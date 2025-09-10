@@ -52,7 +52,7 @@ const initialUpgrades: Upgrade[] = [
     description: 'Sharper sword, harder hits. Clicks slice for more!',
     cost: 15,
     level: 0,
-    maxLevel: 20,
+    maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 0,
     clickPowerBonus: 1,
     rarity: 'common',
@@ -65,7 +65,7 @@ const initialUpgrades: Upgrade[] = [
     description: 'King sends better steel. Clicks deal extra damage.',
     cost: 100,
     level: 0,
-    maxLevel: 15,
+    maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 0,
     clickPowerBonus: 2,
     rarity: 'common',
@@ -78,7 +78,7 @@ const initialUpgrades: Upgrade[] = [
     description: 'Turbo-charge your gauntlets with Elixir!',
     cost: 500,
     level: 0,
-    maxLevel: 10,
+    maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 0,
     clickPowerBonus: 5,
     rarity: 'rare',
@@ -91,7 +91,7 @@ const initialUpgrades: Upgrade[] = [
     description: 'Rage-boost your fingers for furious taps.',
     cost: 2500,
     level: 0,
-    maxLevel: 8,
+    maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 0,
     clickPowerBonus: 10,
     rarity: 'epic',
@@ -104,7 +104,7 @@ const initialUpgrades: Upgrade[] = [
     description: 'Upgrade the P.E.K.K.A core for monstrous clicks.',
     cost: 15000,
     level: 0,
-    maxLevel: 5,
+    maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 0,
     clickPowerBonus: 25,
     rarity: 'legendary',
@@ -118,7 +118,7 @@ const initialUpgrades: Upgrade[] = [
     description: 'A loyal Mini Pekka that makes pancakes!',
     cost: 10,
     level: 0,
-    maxLevel: 10,
+    maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 1,
     rarity: 'common',
     icon: '🥞',
@@ -130,7 +130,7 @@ const initialUpgrades: Upgrade[] = [
     description: 'A brave knight who loves pancake duty!',
     cost: 50,
     level: 0,
-    maxLevel: 10,
+    maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 2,
     rarity: 'common',
     icon: '🛡️',
@@ -142,7 +142,7 @@ const initialUpgrades: Upgrade[] = [
     description: 'A magical wizard who conjures pancakes!',
     cost: 200,
     level: 0,
-    maxLevel: 10,
+    maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 5,
     rarity: 'rare',
     icon: '🧙‍♂️',
@@ -154,7 +154,7 @@ const initialUpgrades: Upgrade[] = [
     description: 'A cute dragon who breathes pancake fire!',
     cost: 1000,
     level: 0,
-    maxLevel: 10,
+    maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 15,
     rarity: 'epic',
     icon: '🐉',
@@ -166,7 +166,7 @@ const initialUpgrades: Upgrade[] = [
     description: 'A royal prince who commands pancake armies!',
     cost: 5000,
     level: 0,
-    maxLevel: 10,
+    maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 50,
     rarity: 'legendary',
     icon: '👑',
@@ -294,7 +294,7 @@ export function buyUpgrade(state: GameState, upgradeId: string, quantity: number
     while (tempLevel < upgrade.maxLevel && tempPancakes >= tempCost) {
       tempPancakes -= tempCost
       tempLevel += 1
-      tempCost = Math.floor(tempCost * 1.5)
+      tempCost = Math.floor(tempCost * 1.15)
       count += 1
     }
     qty = count
@@ -308,7 +308,7 @@ export function buyUpgrade(state: GameState, upgradeId: string, quantity: number
   let levelsToBuy = qty
   while (levelsToBuy > 0) {
     totalCost += nextCost
-    nextCost = Math.floor(nextCost * 1.5)
+    nextCost = Math.floor(nextCost * 1.15)
     levelsToBuy -= 1
   }
 

@@ -20,14 +20,28 @@ export default function NumberDisplay({
   animated = true
 }: NumberDisplayProps) {
   const formatNumber = (num: number): string => {
-    if (num >= 1000000000) {
-      return (num / 1000000000).toFixed(1) + 'B'
-    } else if (num >= 1000000) {
-      return (num / 1000000).toFixed(1) + 'M'
-    } else if (num >= 1000) {
-      return (num / 1000).toFixed(1) + 'K'
+    // Compact formatting up to nonillion
+    const tiers = [
+      { v: 1e30, s: 'Nn' }, // nonillion (10^30)
+      { v: 1e27, s: 'Oc' }, // octillion
+      { v: 1e24, s: 'Sp' }, // septillion
+      { v: 1e21, s: 'Sx' }, // sextillion
+      { v: 1e18, s: 'Qi' }, // quintillion
+      { v: 1e15, s: 'Qa' }, // quadrillion
+      { v: 1e12, s: 'T' },  // trillion
+      { v: 1e9,  s: 'B' },  // billion
+      { v: 1e6,  s: 'M' },  // million
+      { v: 1e3,  s: 'K' },  // thousand
+    ]
+    const abs = Math.abs(num)
+    for (const t of tiers) {
+      if (abs >= t.v) {
+        const val = (num / t.v)
+        const formatted = val >= 100 ? val.toFixed(0) : val >= 10 ? val.toFixed(1) : val.toFixed(2)
+        return formatted.replace(/\.0+$/, '') + t.s
+      }
     }
-    return num.toString()
+    return num.toLocaleString()
   }
 
   const sizeClasses = {

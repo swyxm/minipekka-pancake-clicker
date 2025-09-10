@@ -66,7 +66,6 @@ export default function Clicker() {
         onClick={() => { /* onEmit will be invoked by PancakeEmitter wrapper */ }}
         size="lg"
         className="w-full game-glow"
-        disabled={isClicking}
       >
         CLICK MINI PEKKA
       </Button>
