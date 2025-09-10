@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers'
 
-export type Rarity = 'common' | 'rare' | 'epic' | 'legendary' | 'champion'
+export type Rarity = 'starter' | 'common' | 'rare' | 'epic' | 'legendary' | 'champion'
 
 export interface Upgrade {
   id: string
@@ -120,7 +120,7 @@ const initialUpgrades: Upgrade[] = [
     level: 0,
     maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 1,
-    rarity: 'common',
+    rarity: 'starter',
     icon: '🥞',
     unlocked: true,
   },

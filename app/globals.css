@@ -43,9 +43,9 @@ body {
 }
 
 .game-card {
-  background: linear-gradient(145deg, #1a237e, #263238);
-  border: 1px solid #37474f;
-  box-shadow: 0 4px 20px rgba(26, 35, 126, 0.3);
+  background: linear-gradient(145deg, theme('colors.pekka-navy'), theme('colors.pekka-dark'));
+  border: 1px solid theme('colors.pekka-border');
+  box-shadow: theme('boxShadow.pekka');
 }
 
 .game-card-hover {
@@ -53,15 +53,15 @@ body {
 }
 
 .game-button {
-  background: linear-gradient(145deg, #2196f3, #1976d2);
-  border: 1px solid #2196f3;
-  color: #e3f2fd;
+  background: linear-gradient(145deg, theme('colors.pekka-blue'), theme('colors.pekka-cyan'));
+  border: 1px solid theme('colors.pekka-blue');
+  color: theme('colors.pekka-text');
   transition: all 0.2s ease;
 }
 
 .game-button:hover {
-  background: linear-gradient(145deg, #1976d2, #1565c0);
-  box-shadow: 0 0 20px rgba(33, 150, 243, 0.4);
+  background: linear-gradient(145deg, theme('colors.pekka-cyan'), theme('colors.pekka-blue'));
+  box-shadow: theme('boxShadow.pekka-glow');
   transform: translateY(-1px);
 }
 
@@ -71,24 +71,24 @@ body {
 }
 
 .game-input {
-  background: #263238;
-  border: 1px solid #37474f;
-  color: #e3f2fd;
+  background: theme('colors.pekka-dark');
+  border: 1px solid theme('colors.pekka-border');
+  color: theme('colors.pekka-text');
   transition: all 0.2s ease;
 }
 
 .game-input:focus {
-  border-color: #2196f3;
-  box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+  border-color: theme('colors.pekka-blue');
+  box-shadow: 0 0 10px theme('colors.pekka-blue/30');
   outline: none;
 }
 
 .game-glow {
-  box-shadow: 0 0 20px rgba(33, 150, 243, 0.4);
+  box-shadow: theme('boxShadow.pekka-glow');
 }
 
 .text-glow {
-  text-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+  text-shadow: 0 0 10px theme('colors.pekka-blue/50');
 }
 
 .mechanical-click {
@@ -114,54 +114,63 @@ body {
   font-family: 'Roboto Mono', monospace;
 }
 
-/* Rarity System - Cleaner Design */
+.rarity-starter {
+  border-color: #ddb36b;
+  background: linear-gradient(145deg, #ddb36b, #f59e0b);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
 .rarity-common {
-  border-color: #607d8b;
-  background: linear-gradient(145deg, #37474f, #455a64);
+  border-color: #8a94ad;
+  background: linear-gradient(145deg, #2a2d3a, #3a3f4f);
+  box-shadow: 0 2px 8px rgba(138, 148, 173, 0.2);
 }
 
 .rarity-rare {
-  border-color: #2196f3;
-  background: linear-gradient(145deg, #1976d2, #1565c0);
+  border-color: #4fc3f7;
+  background: linear-gradient(145deg, #1e3a8a, #3b82f6);
+  box-shadow: 0 2px 12px rgba(79, 195, 247, 0.3);
 }
 
 .rarity-epic {
   border-color: #9c27b0;
-  background: linear-gradient(145deg, #7b1fa2, #6a1b9a);
+  background: linear-gradient(145deg, #6a1b9a, #8e24aa);
+  box-shadow: 0 2px 16px rgba(156, 39, 176, 0.4);
 }
 
 .rarity-legendary {
   border-color: #ff9800;
-  background: linear-gradient(145deg, #f57c00, #ef6c00);
+  background: linear-gradient(145deg, #e65100, #ff6f00);
+  box-shadow: 0 2px 20px rgba(255, 152, 0, 0.5);
 }
 
 .rarity-champion {
-  border-color: #ff4081;
-  background: linear-gradient(145deg, #e91e63, #c2185b);
+  border-color: #e91e63;
+  background: linear-gradient(145deg, #ad1457, #f06292);
+  box-shadow: 0 2px 24px rgba(233, 30, 99, 0.6);
 }
 
-/* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #263238;
+  background: theme('colors.pekka-dark');
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #37474f;
+  background: theme('colors.pekka-border');
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2196f3;
+  background: theme('colors.pekka-blue');
 }
 
 /* Subtle thin scrollbar utility for specific containers */
 .thin-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(147, 197, 253, 0.35) transparent;
+  scrollbar-color: theme('colors.pekka-blue/35') transparent;
 }
 .thin-scrollbar::-webkit-scrollbar {
   width: 6px;
@@ -170,6 +179,6 @@ body {
   background: transparent;
 }
 .thin-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(147, 197, 253, 0.35);
+  background-color: theme('colors.pekka-blue/35');
   border-radius: 9999px;
 }

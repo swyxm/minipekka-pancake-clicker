@@ -13,24 +13,23 @@ module.exports = {
         'orbitron': ['Orbitron', 'monospace'],
       },
       colors: {
-        // Mini Pekka Navy Blue Theme
-        'pekka-navy': '#1a237e',
-        'pekka-navy-light': '#3949ab',
-        'pekka-navy-dark': '#0d1421',
-        'pekka-blue': '#2196f3',
-        'pekka-cyan': '#00bcd4',
-        'pekka-silver': '#b0bec5',
-        'pekka-gray': '#607d8b',
-        'pekka-dark': '#263238',
-        'pekka-darker': '#1a1a1a',
-        'pekka-accent': '#ff4081',
-        'pekka-success': '#4caf50',
-        'pekka-warning': '#ff9800',
-        'pekka-error': '#f44336',
-        'pekka-text': '#e3f2fd',
-        'pekka-text-secondary': '#90a4ae',
-        'pekka-border': '#37474f',
-        'pekka-hover': '#2c3e50',
+        'pekka-navy': '#121b41',          // deep armor navy
+        'pekka-navy-light': '#31448c',    // lighter panel blue
+        'pekka-navy-dark': '#0f111c',     // shadowy inner plating
+        'pekka-blue': '#78c2e6',          // glowing blue highlight
+        'pekka-cyan': '#4db7d8',          // softer blue glow accent
+        'pekka-silver': '#aab5c5',        // muted steel/metal
+        'pekka-gray': '#5a6b80',          // worn metal shadow
+        'pekka-dark': '#101321',          // almost black navy
+        'pekka-darker': '#0a0c14',        // true black-steel base
+        'pekka-accent': '#ff4f7d',        // hot pink eye/glow accent
+        'pekka-success': '#4caf70',       // green for UI feedback
+        'pekka-warning': '#ff9f40',       // warm orange warning
+        'pekka-error': '#e84c4c',         // sharper red
+        'pekka-text': '#dce8f8',          // icy off-white text
+        'pekka-text-secondary': '#8a94ad',// muted steel text
+        'pekka-border': '#2a3350',        // armored edge outline
+        'pekka-hover': '#1f2a45',         // hover state, deepened navy
       },
       animation: {
         'pulse-soft': 'pulse-soft 2s ease-in-out infinite',

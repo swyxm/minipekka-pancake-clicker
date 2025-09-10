@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useApiGameStore } from '@/store/apiGameStore'
 import Button from '@/components/ui/Button'
@@ -16,21 +16,80 @@ interface FloatingPancake {
 }
 
 export default function Clicker() {
-  const { click, pancakes, clickPower, pancakesPerSecond } = useApiGameStore()
+  const { click, pancakes, clickPower, pancakesPerSecond, totalClicks } = useApiGameStore()
   const [floatingPancakes, setFloatingPancakes] = useState<FloatingPancake[]>([])
   const [isClicking, setIsClicking] = useState(false)
+  const [isClickingSession, setIsClickingSession] = useState(false)
+  const [sessionStartTime, setSessionStartTime] = useState<number | null>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+
+  const playSound = () => {
+    if (audioRef.current) {
+      const audio = new Audio('/pancakes.mp3')
+      audio.volume = 0.7
+      audio.play().catch(() => {
+      })
+    }
+  }
 
   const onEmit = () => {
     click()
     setIsClicking(true)
     setTimeout(() => setIsClicking(false), 150)
+    
+    if (!isClickingSession) {
+      setIsClickingSession(true)
+      setSessionStartTime(Date.now())
+      playSound()
+    }
   }
 
+  // Handle clicking session timing
+  useEffect(() => {
+    if (isClickingSession && sessionStartTime) {
+      // Clear any existing interval
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+      }
+
+      // Set up interval to play sound every 4 seconds
+      intervalRef.current = setInterval(() => {
+        playSound()
+      }, 3000)
+
+      // Cleanup interval when component unmounts or session ends
+      return () => {
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current)
+        }
+      }
+    }
+  }, [isClickingSession, sessionStartTime])
+
+  useEffect(() => {
+    if (isClickingSession) {
+      const timeout = setTimeout(() => {
+        setIsClickingSession(false)
+        setSessionStartTime(null)
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current)
+        }
+      }, 1000)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [isClickingSession, totalClicks])
+
   return (
-    <Card className="text-center" glow>
-      <h2 className="clash-font-bold text-3xl font-bold text-pekka-blue mb-6 text-glow">
-        Click Mini Pekka!
-      </h2>
+    <>
+      <audio ref={audioRef} preload="auto">
+        <source src="/pancakes.mp3" type="audio/mpeg" />
+      </audio>
+      <Card className="text-center" glow>
+        <h2 className="clash-font-bold text-3xl font-bold text-pekka-blue mb-6 text-glow">
+          Click Mini Pekka!
+        </h2>
       
       <div className="relative inline-block mb-8">
         <PancakeEmitter onEmit={onEmit} className="relative inline-block">
@@ -93,6 +152,7 @@ export default function Clicker() {
           color="success"
         />
       </div>
-    </Card>
+      </Card>
+    </>
   )
 }

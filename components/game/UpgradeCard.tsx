@@ -18,6 +18,7 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
+      case 'starter': return 'rarity-starter'
       case 'common': return 'rarity-common'
       case 'rare': return 'rarity-rare'
       case 'epic': return 'rarity-epic'
