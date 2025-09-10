@@ -68,10 +68,12 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
   }
 
   const getImageSrc = () => {
+    if (upgrade.id === 'mini-pekka') return '/minipekka.png'
     if (upgrade.id === 'knight') return '/knight.png'
     if (upgrade.id === 'prince') return '/prince.png'
     if (upgrade.id === 'wizard') return '/wizard.png'
     if (upgrade.id === 'dragon') return '/bbdragon.png'
+    if (upgrade.id === 'pekka') return '/pekka.png'
     return null
   }
 
@@ -96,9 +98,11 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
               <Image
                 src={imageSrc}
                 alt={upgrade.name}
-                width={96}
-                height={96}
-                className="object-contain w-full h-full"
+                width={upgrade.id === 'pekka' ? 120 : 96}
+                height={upgrade.id === 'pekka' ? 120 : 96}
+                className={`object-contain w-full h-full ${
+                  upgrade.id === 'pekka' ? '-ml-4 scale-150' : ''
+                }`}
               />
             ) : (
               <span className="text-5xl">{upgrade.icon}</span>
