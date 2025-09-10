@@ -11,34 +11,20 @@ import Header from '@/components/Header'
 export default function Home() {
   const { loadGameState, pancakesPerSecond, isLoading, error } = useApiGameStore()
 
-  // Load game state on mount
+  // Load game state on mount (silent)
   useEffect(() => {
-    loadGameState()
+    loadGameState({ silent: true })
   }, [loadGameState])
 
-  // Game loop for passive pancake generation
+  // Poll server state every second to pick up passive gain and other updates
   useEffect(() => {
     const interval = setInterval(() => {
-      if (pancakesPerSecond > 0) {
-        useApiGameStore.getState().click()
-      }
+      useApiGameStore.getState().loadGameState()
     }, 1000)
-
     return () => clearInterval(interval)
-  }, [pancakesPerSecond])
+  }, [])
 
-  if (isLoading) {
-    return (
-      <main className="min-h-screen bg-pekka-navy-dark flex items-center justify-center">
-        <div className="text-center">
-          <div className="clash-font-bold text-2xl text-pekka-blue mb-4">
-            Loading Mini Pekka...
-          </div>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pekka-blue mx-auto"></div>
-        </div>
-      </main>
-    )
-  }
+  // No blocking full-screen loading; the UI renders while state hydrates
 
   if (error) {
     return (

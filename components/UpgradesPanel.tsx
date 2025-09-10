@@ -6,7 +6,7 @@ import Card from '@/components/ui/Card'
 import UpgradeCard from '@/components/game/UpgradeCard'
 
 export default function UpgradesPanel() {
-  const { upgrades } = useApiGameStore()
+  const { upgrades, quantityMode, setQuantityMode } = useApiGameStore()
 
   return (
     <Card>
@@ -15,6 +15,25 @@ export default function UpgradesPanel() {
         Upgrades
       </h3>
       
+      <div className="mb-4 flex items-center gap-2">
+        <button
+          className={`px-3 py-1 rounded-md border ${quantityMode === 'x1' ? 'game-button' : 'game-card'}`}
+          onClick={() => setQuantityMode('x1')}
+        >x1</button>
+        <button
+          className={`px-3 py-1 rounded-md border ${quantityMode === 'x10' ? 'game-button' : 'game-card'}`}
+          onClick={() => setQuantityMode('x10')}
+        >x10</button>
+        <button
+          className={`px-3 py-1 rounded-md border ${quantityMode === 'x100' ? 'game-button' : 'game-card'}`}
+          onClick={() => setQuantityMode('x100')}
+        >x100</button>
+        <button
+          className={`px-3 py-1 rounded-md border ${quantityMode === 'max' ? 'game-button' : 'game-card'}`}
+          onClick={() => setQuantityMode('max')}
+        >Max</button>
+      </div>
+
       <div className="space-y-4 max-h-96 overflow-y-auto">
         {upgrades.map((upgrade) => (
           <UpgradeCard key={upgrade.id} upgrade={upgrade} />

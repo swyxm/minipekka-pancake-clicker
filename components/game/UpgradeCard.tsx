@@ -14,7 +14,7 @@ interface UpgradeCardProps {
 }
 
 export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
-  const { pancakes, buyUpgrade } = useApiGameStore()
+  const { pancakes, buyUpgrade, quantityMode } = useApiGameStore()
 
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
@@ -33,7 +33,8 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
 
   const handleBuy = () => {
     if (canAfford && !isMaxLevel && !isLocked) {
-      buyUpgrade(upgrade.id)
+      const qty = quantityMode === 'max' ? 'max' : quantityMode === 'x10' ? 10 : quantityMode === 'x100' ? 100 : 1
+      buyUpgrade(upgrade.id, qty)
     }
   }
 

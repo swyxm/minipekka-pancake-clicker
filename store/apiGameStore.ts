@@ -50,10 +50,12 @@ export interface GameState {
   
   // Actions
   click: () => Promise<void>
-  buyUpgrade: (upgradeId: string) => Promise<boolean>
-  loadGameState: () => Promise<void>
+  buyUpgrade: (upgradeId: string, quantity?: number | 'max') => Promise<boolean>
+  loadGameState: (opts?: { silent?: boolean }) => Promise<void>
   resetGame: () => Promise<void>
   setError: (error: string | null) => void
+  setQuantityMode: (mode: 'x1' | 'x10' | 'x100' | 'max') => void
+  quantityMode: 'x1' | 'x10' | 'x100' | 'max'
 }
 
 export const useApiGameStore = create<GameState>((set, get) => ({
@@ -72,22 +74,20 @@ export const useApiGameStore = create<GameState>((set, get) => ({
   startTime: Date.now(),
   isLoading: false,
   error: null,
+  quantityMode: 'x1',
 
   // Actions
   click: async () => {
-    set({ isLoading: true, error: null })
-    
+    // Optimistic UI: update instantly, then sync
+    const { clickPower } = get()
+    set((s) => ({
+      pancakes: s.pancakes + clickPower,
+      totalPancakes: s.totalPancakes + clickPower,
+      totalClicks: s.totalClicks + 1,
+    }))
     try {
-      const response = await fetch('/api/game/click', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ clickPower: get().clickPower }),
-      })
-      
+      const response = await fetch('/api/game/click', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
       const data = await response.json()
-      
       if (data.success) {
         set({
           pancakes: data.gameState.pancakes,
@@ -98,29 +98,29 @@ export const useApiGameStore = create<GameState>((set, get) => ({
           playTime: data.gameState.playTime,
           achievements: data.gameState.achievements,
           unlockedAchievements: data.gameState.unlockedAchievements,
-          isLoading: false
         })
-      } else {
-        set({ error: data.error, isLoading: false })
       }
     } catch (error) {
-      set({ 
-        error: 'Failed to process click', 
-        isLoading: false 
-      })
+      // Keep optimistic state; optionally surface a toast
     }
   },
 
-  buyUpgrade: async (upgradeId: string) => {
+  buyUpgrade: async (upgradeId: string, quantity?: number | 'max') => {
     set({ isLoading: true, error: null })
     
     try {
+      let qty: number | 'max' = quantity ?? 1
+      const mode = get().quantityMode
+      if (quantity === undefined) {
+        qty = mode === 'x10' ? 10 : mode === 'x100' ? 100 : mode === 'max' ? 'max' : 1
+      }
+
       const response = await fetch('/api/game/upgrade', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ upgradeId }),
+        body: JSON.stringify({ upgradeId, quantity: qty }),
       })
       
       const data = await response.json()
@@ -152,13 +152,12 @@ export const useApiGameStore = create<GameState>((set, get) => ({
     }
   },
 
-  loadGameState: async () => {
-    set({ isLoading: true, error: null })
-    
+  loadGameState: async (opts?: { silent?: boolean }) => {
+    const silent = opts?.silent ?? false
+    if (!silent) set({ isLoading: true, error: null })
     try {
       const response = await fetch('/api/game/state')
       const data = await response.json()
-      
       if (data.success) {
         set({
           pancakes: data.gameState.pancakes,
@@ -176,10 +175,7 @@ export const useApiGameStore = create<GameState>((set, get) => ({
         set({ error: data.error, isLoading: false })
       }
     } catch (error) {
-      set({ 
-        error: 'Failed to load game state', 
-        isLoading: false 
-      })
+      set({ error: 'Failed to load game state', isLoading: false })
     }
   },
 
@@ -222,5 +218,7 @@ export const useApiGameStore = create<GameState>((set, get) => ({
 
   setError: (error: string | null) => {
     set({ error })
-  }
+  },
+
+  setQuantityMode: (mode: 'x1' | 'x10' | 'x100' | 'max') => set({ quantityMode: mode })
 }))
