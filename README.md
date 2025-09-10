@@ -21,7 +21,7 @@ An incredibly addictive idle clicker game featuring your favorite Clash Royale c
 
 <div align="center">
 
-![Game Preview](./public/pekka.png)
+<img src="./public/pekka.png" alt="Game Preview" width="200" height="200" />
 
 </div>
 
@@ -213,8 +213,8 @@ This project is open source and available under the [MIT License](LICENSE).
 
 **Made with ❤️ and lots of 🥞**
 
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/minipekka-pancake-clicker?style=social)](https://github.com/yourusername/minipekka-pancake-clicker)
-[![GitHub forks](https://img.shields.io/github/forks/yourusername/minipekka-pancake-clicker?style=social)](https://github.com/yourusername/minipekka-pancake-clicker)
+[![GitHub stars](https://img.shields.io/github/stars/yourusername/minipekka-pancake-clicker?style=social)](https://github.com/swyxm/minipekka-pancake-clicker)
+[![GitHub forks](https://img.shields.io/github/forks/yourusername/minipekka-pancake-clicker?style=social)](https://github.com/swyxm/minipekka-pancake-clicker)
 
 *Star ⭐ this repository if you enjoyed the game!*
 
