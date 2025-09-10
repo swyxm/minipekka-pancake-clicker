@@ -8,6 +8,7 @@ export interface Upgrade {
   level: number
   maxLevel: number
   pancakesPerSecond: number
+  clickPowerBonus?: number
   rarity: 'common' | 'rare' | 'epic' | 'legendary' | 'champion'
   icon: string
   unlocked: boolean

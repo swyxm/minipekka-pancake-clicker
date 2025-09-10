@@ -27,24 +27,25 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
     }
   }
 
-  // compute batch cost and quantity based on current selection
+  // compute batch cost and quantity based on current selection (matches server logic)
   const computeBatch = () => {
-    const costStep = (c: number) => Math.floor(c * 1.5)
+    const remainingLevels = upgrade.maxLevel - upgrade.level
+    const target = quantityMode === 'x10' ? 10 : quantityMode === 'x100' ? 100 : quantityMode === 'max' ? Number.MAX_SAFE_INTEGER : 1
+
+    // Start from the current next-cost for this upgrade
+    let nextCost = upgrade.cost
     let totalCost = 0
     let qty = 0
-    let nextCost = upgrade.cost
-    let remainingLevels = upgrade.maxLevel - upgrade.level
-    let target = quantityMode === 'x10' ? 10 : quantityMode === 'x100' ? 100 : quantityMode === 'max' ? Number.MAX_SAFE_INTEGER : 1
 
     if (quantityMode === 'max') {
-      // compute max affordable respecting next cost changes
       let tempPancakes = pancakes
-      while (remainingLevels > 0 && tempPancakes >= nextCost) {
+      let tempRemaining = remainingLevels
+      while (tempRemaining > 0 && tempPancakes >= nextCost) {
         totalCost += nextCost
         tempPancakes -= nextCost
         qty += 1
-        remainingLevels -= 1
-        nextCost = costStep(nextCost)
+        tempRemaining -= 1
+        nextCost = Math.floor(nextCost * 1.5)
       }
       return { totalCost, qty }
     }
@@ -52,7 +53,7 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
     const buyQty = Math.min(target, remainingLevels)
     for (let i = 0; i < buyQty; i++) {
       totalCost += nextCost
-      nextCost = costStep(nextCost)
+      nextCost = Math.floor(nextCost * 1.5)
       qty += 1
     }
     return { totalCost, qty }
@@ -79,11 +80,11 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
       transition={{ duration: 0.3 }}
     >
       <Card
-        className={`p-4 transition-all duration-200 ${
+        className={`p-4 transition-all duration-200 overflow-hidden ${
           getRarityColor(upgrade.rarity)
         } ${
           !isLocked && canAfford && !isMaxLevel
-            ? 'pekka-card-hover cursor-pointer pekka-glow'
+            ? 'game-card-hover cursor-pointer game-glow'
             : 'cursor-not-allowed opacity-50'
         }`}
         onClick={handleBuy}
@@ -128,12 +129,22 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
         
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center text-sm clash-font">
-              <Zap className="w-4 h-4 mr-1 text-pekka-success" />
-              <span className="text-pekka-success">
-                +{upgrade.pancakesPerSecond.toLocaleString()}/sec
-              </span>
-            </div>
+            {upgrade.pancakesPerSecond > 0 && (
+              <div className="flex items-center text-sm clash-font">
+                <Zap className="w-4 h-4 mr-1 text-pekka-success" />
+                <span className="text-pekka-success">
+                  +{upgrade.pancakesPerSecond.toLocaleString()}/sec
+                </span>
+              </div>
+            )}
+            {upgrade.clickPowerBonus && upgrade.clickPowerBonus > 0 && (
+              <div className="flex items-center text-sm clash-font">
+                <Zap className="w-4 h-4 mr-1 text-pekka-accent" />
+                <span className="text-pekka-accent">
+                  +{upgrade.clickPowerBonus.toLocaleString()}/click
+                </span>
+              </div>
+            )}
             
             {isMaxLevel && (
               <div className="text-pekka-warning clash-font-bold text-sm font-bold">

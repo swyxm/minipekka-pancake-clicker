@@ -10,6 +10,7 @@ export interface Upgrade {
   level: number
   maxLevel: number
   pancakesPerSecond: number
+  clickPowerBonus?: number
   rarity: Rarity
   icon: string
   unlocked: boolean
@@ -45,6 +46,72 @@ const SESSION_COOKIE = 'mp_session'
 const sessionIdToState = new Map<string, GameState>()
 
 const initialUpgrades: Upgrade[] = [
+  {
+    id: 'mini-pekka-sharp-blade',
+    name: 'Mini Pekka: Sharpened Blade',
+    description: 'Sharper sword, harder hits. Clicks slice for more!',
+    cost: 15,
+    level: 0,
+    maxLevel: 20,
+    pancakesPerSecond: 0,
+    clickPowerBonus: 1,
+    rarity: 'common',
+    icon: '🗡️',
+    unlocked: true,
+  },
+  {
+    id: 'royal-reinforcement',
+    name: 'Royal Reinforcement',
+    description: 'King sends better steel. Clicks deal extra damage.',
+    cost: 100,
+    level: 0,
+    maxLevel: 15,
+    pancakesPerSecond: 0,
+    clickPowerBonus: 2,
+    rarity: 'common',
+    icon: '🏰',
+    unlocked: false,
+  },
+  {
+    id: 'elixir-overclock',
+    name: 'Elixir Overclock',
+    description: 'Turbo-charge your gauntlets with Elixir!',
+    cost: 500,
+    level: 0,
+    maxLevel: 10,
+    pancakesPerSecond: 0,
+    clickPowerBonus: 5,
+    rarity: 'rare',
+    icon: '⚡',
+    unlocked: false,
+  },
+  {
+    id: 'rage-spell',
+    name: 'Rage Spell',
+    description: 'Rage-boost your fingers for furious taps.',
+    cost: 2500,
+    level: 0,
+    maxLevel: 8,
+    pancakesPerSecond: 0,
+    clickPowerBonus: 10,
+    rarity: 'epic',
+    icon: '✨',
+    unlocked: false,
+  },
+  {
+    id: 'pekka-core-upgrade',
+    name: 'P.E.K.K.A Core Upgrade',
+    description: 'Upgrade the P.E.K.K.A core for monstrous clicks.',
+    cost: 15000,
+    level: 0,
+    maxLevel: 5,
+    pancakesPerSecond: 0,
+    clickPowerBonus: 25,
+    rarity: 'legendary',
+    icon: '🤖',
+    unlocked: false,
+  },
+  // Passive Generation Upgrades
   {
     id: 'mini-pekka',
     name: 'Mini Pekka',
@@ -194,6 +261,10 @@ export function updatePancakesPerSecond(state: GameState): void {
   state.pancakesPerSecond = state.upgrades.reduce((sum, u) => sum + u.pancakesPerSecond * u.level, 0)
 }
 
+export function updateClickPower(state: GameState): void {
+  state.clickPower = 1 + state.upgrades.reduce((sum, u) => sum + (u.clickPowerBonus || 0) * u.level, 0)
+}
+
 export function click(state: GameState): void {
   applyPassiveGain(state)
   state.pancakes += state.clickPower
@@ -252,6 +323,7 @@ export function buyUpgrade(state: GameState, upgradeId: string, quantity: number
   upgrade.cost = nextCost // next cost after qty increments
 
   updatePancakesPerSecond(state)
+  updateClickPower(state)
   updateAchievements(state)
 
   return { success: true, purchased: qty, totalCost }

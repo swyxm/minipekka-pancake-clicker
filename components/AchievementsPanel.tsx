@@ -13,16 +13,18 @@ export default function AchievementsPanel() {
   const totalCount = achievements.length
 
   return (
-    <Card>
-      <h3 className="text-2xl font-bold clash-font-bold text-pekka-blue mb-6 flex items-center">
-        <Trophy className="w-6 h-6 mr-2" />
-        Achievements
-        <span className="ml-2 text-lg text-pekka-text-secondary clash-font">
-          ({unlockedCount}/{totalCount})
-        </span>
-      </h3>
+    <Card className="h-full flex flex-col overflow-hidden">
+      <div className="flex-shrink-0">
+        <h3 className="text-2xl font-bold clash-font-bold text-pekka-blue mb-4 flex items-center">
+          <Trophy className="w-6 h-6 mr-2" />
+          Achievements
+          <span className="ml-2 text-lg text-pekka-text-secondary clash-font">
+            ({unlockedCount}/{totalCount})
+          </span>
+        </h3>
+      </div>
       
-      <div className="space-y-4 max-h-96 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto space-y-3 pr-2">
         {achievements.map((achievement) => (
           <AchievementCard
             key={achievement.id}
@@ -34,7 +36,7 @@ export default function AchievementsPanel() {
       
       {unlockedCount === totalCount && (
         <motion.div
-          className="mt-6 p-4 pekka-glow rounded-xl border border-pekka-warning text-center"
+          className="mt-4 p-4 pekka-glow rounded-xl border border-pekka-warning text-center flex-shrink-0"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
