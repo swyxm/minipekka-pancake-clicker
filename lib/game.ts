@@ -178,7 +178,7 @@ const initialUpgrades: Upgrade[] = [
     description: 'The ultimate pancake making machine!',
     cost: 25000,
     level: 0,
-    maxLevel: 10,
+    maxLevel: Number.MAX_SAFE_INTEGER,
     pancakesPerSecond: 200,
     rarity: 'champion',
     icon: '🤖',
