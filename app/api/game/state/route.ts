@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+export const dynamic = 'force-dynamic'
+
 import { cookies } from 'next/headers'
 import { getOrCreateSessionId, getState, resetState, serializeState, SESSION_COOKIE } from '@/lib/game'
 
@@ -151,7 +153,10 @@ export async function GET() {
     const jar = await cookies()
     jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
   }
-  return NextResponse.json({ success: true, gameState: serializeState(state) })
+  return NextResponse.json(
+    { success: true, gameState: serializeState(state) },
+    { headers: { 'Cache-Control': 'no-store' } }
+  )
 }
 
 export async function POST(request: NextRequest) {
@@ -163,7 +168,10 @@ export async function POST(request: NextRequest) {
       const jar = await cookies()
       jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
     }
-    return NextResponse.json({ success: true, gameState: serializeState(state) })
+    return NextResponse.json(
+      { success: true, gameState: serializeState(state) },
+      { headers: { 'Cache-Control': 'no-store' } }
+    )
   } catch (error) {
     return NextResponse.json(
       { success: false, error: 'Failed to update game state' },
@@ -179,5 +187,8 @@ export async function DELETE() {
     const jar = await cookies()
     jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
   }
-  return NextResponse.json({ success: true, gameState: serializeState(state) })
+  return NextResponse.json(
+    { success: true, gameState: serializeState(state) },
+    { headers: { 'Cache-Control': 'no-store' } }
+  )
 }

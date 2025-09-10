@@ -346,6 +346,7 @@ export function serializeState(state: GameState) {
     pancakesPerSecond: state.pancakesPerSecond,
     totalClicks: state.totalClicks,
     playTime: state.playTime,
+    lastUpdate: state.lastUpdate,
     upgrades: state.upgrades,
     achievements: state.achievements,
     unlockedAchievements: state.unlockedAchievements,

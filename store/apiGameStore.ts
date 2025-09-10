@@ -47,6 +47,7 @@ export interface GameState {
   totalClicks: number
   playTime: number
   startTime: number
+  lastUpdate?: number
   
   // Loading states
   isLoading: boolean
@@ -90,19 +91,20 @@ export const useApiGameStore = create<GameState>((set, get) => ({
       totalClicks: s.totalClicks + 1,
     }))
     try {
-      const response = await fetch('/api/game/click', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}) })
+      const response = await fetch('/api/game/click', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}), cache: 'no-store' as RequestCache })
       const data = await response.json()
       if (data.success) {
-        set({
-          pancakes: data.gameState.pancakes,
-          totalPancakes: data.gameState.totalPancakes,
+        // Guard against stale responses: only apply if it would not reduce counters
+        set((s) => ({
+          pancakes: Math.max(s.pancakes, data.gameState.pancakes),
+          totalPancakes: Math.max(s.totalPancakes, data.gameState.totalPancakes),
           clickPower: data.gameState.clickPower,
           pancakesPerSecond: data.gameState.pancakesPerSecond,
-          totalClicks: data.gameState.totalClicks,
+          totalClicks: Math.max(s.totalClicks, data.gameState.totalClicks),
           playTime: data.gameState.playTime,
           achievements: data.gameState.achievements,
           unlockedAchievements: data.gameState.unlockedAchievements,
-        })
+        }))
       }
     } catch (error) {
       // Keep optimistic state; optionally surface a toast
@@ -183,20 +185,21 @@ export const useApiGameStore = create<GameState>((set, get) => ({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ upgradeId, quantity: requestedQty }),
+        cache: 'no-store' as RequestCache,
       })
       const data = await response.json()
       if (data.success) {
-        set({
-          pancakes: data.gameState.pancakes,
-          totalPancakes: data.gameState.totalPancakes,
+        set((s) => ({
+          pancakes: Math.max(s.pancakes, data.gameState.pancakes),
+          totalPancakes: Math.max(s.totalPancakes, data.gameState.totalPancakes),
           clickPower: data.gameState.clickPower,
           pancakesPerSecond: data.gameState.pancakesPerSecond,
-          totalClicks: data.gameState.totalClicks,
+          totalClicks: Math.max(s.totalClicks, data.gameState.totalClicks),
           playTime: data.gameState.playTime,
           upgrades: data.gameState.upgrades,
           achievements: data.gameState.achievements,
           unlockedAchievements: data.gameState.unlockedAchievements,
-        })
+        }))
         return true
       } else {
         // If server rejected, reload state to correct optimistic UI
@@ -217,21 +220,21 @@ export const useApiGameStore = create<GameState>((set, get) => ({
     const silent = opts?.silent ?? false
     if (!silent) set({ isLoading: true, error: null })
     try {
-      const response = await fetch('/api/game/state')
+      const response = await fetch('/api/game/state', { cache: 'no-store' as RequestCache })
       const data = await response.json()
       if (data.success) {
-        set({
-          pancakes: data.gameState.pancakes,
-          totalPancakes: data.gameState.totalPancakes,
+        set((s) => ({
+          pancakes: Math.max(s.pancakes, data.gameState.pancakes),
+          totalPancakes: Math.max(s.totalPancakes, data.gameState.totalPancakes),
           clickPower: data.gameState.clickPower,
           pancakesPerSecond: data.gameState.pancakesPerSecond,
-          totalClicks: data.gameState.totalClicks,
+          totalClicks: Math.max(s.totalClicks, data.gameState.totalClicks),
           playTime: data.gameState.playTime,
           upgrades: data.gameState.upgrades,
           achievements: data.gameState.achievements,
           unlockedAchievements: data.gameState.unlockedAchievements,
           isLoading: false
-        })
+        }))
       } else {
         set({ error: data.error, isLoading: false })
       }
