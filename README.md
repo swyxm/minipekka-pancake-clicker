@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Pancake Clicker Banner](./public/pancakes.png)
+![Pancake Clicker Banner](./public/pekkalogo.png)
 
 **A Clash Royale themed idle clicker game that's absolutely addictive!**
 
@@ -21,7 +21,9 @@ An incredibly addictive idle clicker game featuring your favorite Clash Royale c
 
 <div align="center">
 
-<img src="./public/pekka.png" alt="Game Preview" width="200" height="200" />
+[![Click to Play!](./public/pancakes.png)](https://minipekka-pancake-clicker.vercel.app/)
+
+**🎮 Click the pancake above!!**
 
 </div>
 

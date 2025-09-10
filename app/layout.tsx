@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   description: 'A Clash Royale themed pancake clicker game featuring Mini Pekka!',
   keywords: 'clash royale, mini pekka, pancake, clicker, game, idle',
   authors: [{ name: 'Mini Pekka Pancake Clicker' }],
+  icons: {
+    icon: '/pekkalogo.ico',
+    shortcut: '/pekkalogo.ico',
+    apple: '/pekkalogo.png',
+  },
 }
 
 export const viewport = {
