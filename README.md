@@ -1,9 +1,7 @@
 # 🥞 Mini Pekka's Pancake Clicker! 🥞
 
 <div align="center">
-
 ![Pancake Clicker Banner](./public/pekkalogo.png)
-
 **A Clash Royale themed idle clicker game that's absolutely addictive!**
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.5.2-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
