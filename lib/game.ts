@@ -41,6 +41,7 @@ export interface GameState {
 }
 
 export const SESSION_COOKIE = 'mp_session'
+export const STATE_COOKIE = 'mp_state'
 
 const sessionIdToState = new Map<string, GameState>()
 
@@ -345,6 +346,67 @@ export function serializeState(state: GameState) {
     upgrades: state.upgrades,
     achievements: state.achievements,
     unlockedAchievements: state.unlockedAchievements,
+  }
+}
+
+function computeCostForLevel(baseCost: number, level: number): number {
+  let cost = baseCost
+  for (let i = 0; i < level; i++) {
+    cost = Math.floor(cost * 1.15)
+  }
+  return cost
+}
+
+function getBaseCostForUpgrade(upgradeId: string): number {
+  const base = initialUpgrades.find(u => u.id === upgradeId)
+  return base ? base.cost : 0
+}
+
+export function encodeStateToCookie(state: GameState): string {
+  const minimal = {
+    pancakes: state.pancakes,
+    totalPancakes: state.totalPancakes,
+    totalClicks: state.totalClicks,
+    lastUpdate: state.lastUpdate,
+    upgrades: state.upgrades.map(u => ({ id: u.id, level: u.level })),
+  }
+  return Buffer.from(JSON.stringify(minimal), 'utf8').toString('base64')
+}
+
+export function hydrateStateFromCookie(state: GameState, encoded?: string | null): boolean {
+  if (!encoded) return false
+  try {
+    const json = Buffer.from(encoded, 'base64').toString('utf8')
+    const data = JSON.parse(json) as {
+      pancakes?: number
+      totalPancakes?: number
+      totalClicks?: number
+      lastUpdate?: number
+      upgrades?: { id: string, level: number }[]
+    }
+
+    if (typeof data.pancakes === 'number') state.pancakes = Math.max(state.pancakes, data.pancakes)
+    if (typeof data.totalPancakes === 'number') state.totalPancakes = Math.max(state.totalPancakes, data.totalPancakes)
+    if (typeof data.totalClicks === 'number') state.totalClicks = Math.max(state.totalClicks, data.totalClicks)
+    if (typeof data.lastUpdate === 'number') state.lastUpdate = Math.max(state.lastUpdate, data.lastUpdate)
+
+    if (Array.isArray(data.upgrades)) {
+      for (const saved of data.upgrades) {
+        const u = state.upgrades.find(x => x.id === saved.id)
+        if (!u) continue
+        if (typeof saved.level === 'number' && saved.level > u.level) {
+          u.level = saved.level
+          u.unlocked = u.unlocked || saved.level > 0
+          const baseCost = getBaseCostForUpgrade(u.id)
+          u.cost = computeCostForLevel(baseCost, u.level)
+        }
+      }
+      updatePancakesPerSecond(state)
+      updateClickPower(state)
+    }
+    return true
+  } catch {
+    return false
   }
 }
 

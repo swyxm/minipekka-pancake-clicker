@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export const dynamic = 'force-dynamic'
 
 import { cookies } from 'next/headers'
-import { getOrCreateSessionId, getState, resetState, serializeState, SESSION_COOKIE } from '@/lib/game'
+import { getOrCreateSessionId, getState, resetState, serializeState, SESSION_COOKIE, STATE_COOKIE, encodeStateToCookie, hydrateStateFromCookie } from '@/lib/game'
 
 let gameState: any = {
   pancakes: 0,
@@ -148,10 +148,13 @@ let gameState: any = {
 export async function GET() {
   const { id, isNew } = await getOrCreateSessionId()
   const state = getState(id)
+  const jar = await cookies()
+  const encoded = jar.get(STATE_COOKIE)?.value || null
+  hydrateStateFromCookie(state, encoded)
   if (isNew) {
-    const jar = await cookies()
     jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
   }
+  jar.set(STATE_COOKIE, encodeStateToCookie(state), { httpOnly: false, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
   return NextResponse.json(
     { success: true, gameState: serializeState(state) },
     { headers: { 'Cache-Control': 'no-store' } }
@@ -163,10 +166,13 @@ export async function POST(request: NextRequest) {
     const _ = await request.json().catch(() => ({}))
     const { id, isNew } = await getOrCreateSessionId()
     const state = getState(id)
+    const jar = await cookies()
+    const encoded = jar.get(STATE_COOKIE)?.value || null
+    hydrateStateFromCookie(state, encoded)
     if (isNew) {
-      const jar = await cookies()
       jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
     }
+    jar.set(STATE_COOKIE, encodeStateToCookie(state), { httpOnly: false, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
     return NextResponse.json(
       { success: true, gameState: serializeState(state) },
       { headers: { 'Cache-Control': 'no-store' } }
