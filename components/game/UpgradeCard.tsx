@@ -27,7 +27,39 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
     }
   }
 
-  const canAfford = pancakes >= upgrade.cost
+  // compute batch cost and quantity based on current selection
+  const computeBatch = () => {
+    const costStep = (c: number) => Math.floor(c * 1.5)
+    let totalCost = 0
+    let qty = 0
+    let nextCost = upgrade.cost
+    let remainingLevels = upgrade.maxLevel - upgrade.level
+    let target = quantityMode === 'x10' ? 10 : quantityMode === 'x100' ? 100 : quantityMode === 'max' ? Number.MAX_SAFE_INTEGER : 1
+
+    if (quantityMode === 'max') {
+      // compute max affordable respecting next cost changes
+      let tempPancakes = pancakes
+      while (remainingLevels > 0 && tempPancakes >= nextCost) {
+        totalCost += nextCost
+        tempPancakes -= nextCost
+        qty += 1
+        remainingLevels -= 1
+        nextCost = costStep(nextCost)
+      }
+      return { totalCost, qty }
+    }
+
+    const buyQty = Math.min(target, remainingLevels)
+    for (let i = 0; i < buyQty; i++) {
+      totalCost += nextCost
+      nextCost = costStep(nextCost)
+      qty += 1
+    }
+    return { totalCost, qty }
+  }
+
+  const { totalCost, qty } = computeBatch()
+  const canAfford = pancakes >= totalCost && qty > 0
   const isMaxLevel = upgrade.level >= upgrade.maxLevel
   const isLocked = !upgrade.unlocked
 
@@ -80,12 +112,14 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
             </div>
           </div>
           
-          <NumberDisplay
-            value={upgrade.cost}
-            label="cost"
-            size="md"
-            color="primary"
-          />
+          <div className="text-right">
+            <div className="clash-font text-pekka-text-secondary text-xs">Price ({quantityMode.toUpperCase()}{quantityMode==='max'?'':''}{qty>0 && quantityMode!=='max'?`×${qty}`:''})</div>
+            <NumberDisplay
+              value={totalCost}
+              size="md"
+              color={canAfford ? 'primary' : 'warning'}
+            />
+          </div>
         </div>
         
         <p className="clash-font text-pekka-text-secondary text-sm mb-3">

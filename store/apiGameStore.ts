@@ -106,8 +106,9 @@ export const useApiGameStore = create<GameState>((set, get) => ({
   },
 
   buyUpgrade: async (upgradeId: string, quantity?: number | 'max') => {
-    set({ isLoading: true, error: null })
-    
+    // Sync latest state first to avoid stale "not enough" errors
+    await get().loadGameState({ silent: true })
+    set({ error: null })
     try {
       let qty: number | 'max' = quantity ?? 1
       const mode = get().quantityMode
@@ -136,18 +137,14 @@ export const useApiGameStore = create<GameState>((set, get) => ({
           upgrades: data.gameState.upgrades,
           achievements: data.gameState.achievements,
           unlockedAchievements: data.gameState.unlockedAchievements,
-          isLoading: false
         })
         return true
       } else {
-        set({ error: data.error, isLoading: false })
+        set({ error: data.error })
         return false
       }
     } catch (error) {
-      set({ 
-        error: 'Failed to purchase upgrade', 
-        isLoading: false 
-      })
+      set({ error: 'Failed to purchase upgrade' })
       return false
     }
   },
