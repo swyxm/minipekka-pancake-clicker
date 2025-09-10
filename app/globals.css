@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Supercell-Magic', 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, #1E3A8A 0%, #7C3AED 50%, #DC2626 100%);
+  min-height: 100vh;
+}
+
+body {
+  color: #e3f2fd;
+  background-attachment: fixed;
+}
+
+.clash-font {
+  font-family: 'Supercell-Magic', 'Orbitron', sans-serif;
+}
+
+.clash-font-bold {
+  font-family: 'Supercell-Magic-Bold', 'Orbitron', sans-serif;
+}
+
+.orbitron-font {
+  font-family: 'Orbitron', monospace;
+}
+
+.gradient-text {
+  background: linear-gradient(45deg, #F59E0B, #DC2626, #7C3AED);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.game-card {
+  background: linear-gradient(145deg, #1a237e, #263238);
+  border: 1px solid #37474f;
+  box-shadow: 0 4px 20px rgba(26, 35, 126, 0.3);
+}
+
+.game-card-hover {
+  @apply hover:bg-pekka-hover hover:border-pekka-blue transition-all duration-200;
+}
+
+.game-button {
+  background: linear-gradient(145deg, #2196f3, #1976d2);
+  border: 1px solid #2196f3;
+  color: #e3f2fd;
+  transition: all 0.2s ease;
+}
+
+.game-button:hover {
+  background: linear-gradient(145deg, #1976d2, #1565c0);
+  box-shadow: 0 0 20px rgba(33, 150, 243, 0.4);
+  transform: translateY(-1px);
+}
+
+.game-button:active {
+  transform: translateY(0);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.game-input {
+  background: #263238;
+  border: 1px solid #37474f;
+  color: #e3f2fd;
+  transition: all 0.2s ease;
+}
+
+.game-input:focus {
+  border-color: #2196f3;
+  box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+  outline: none;
+}
+
+.game-glow {
+  box-shadow: 0 0 20px rgba(33, 150, 243, 0.4);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+}
+
+.mechanical-click {
+  animation: mechanical 0.1s ease-in-out;
+}
+
+@keyframes mechanical {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.98); }
+}
+
+.pancake-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+.number-counter {
+  font-variant-numeric: tabular-nums;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Rarity System - Cleaner Design */
+.rarity-common {
+  border-color: #607d8b;
+  background: linear-gradient(145deg, #37474f, #455a64);
+}
+
+.rarity-rare {
+  border-color: #2196f3;
+  background: linear-gradient(145deg, #1976d2, #1565c0);
+}
+
+.rarity-epic {
+  border-color: #9c27b0;
+  background: linear-gradient(145deg, #7b1fa2, #6a1b9a);
+}
+
+.rarity-legendary {
+  border-color: #ff9800;
+  background: linear-gradient(145deg, #f57c00, #ef6c00);
+}
+
+.rarity-champion {
+  border-color: #ff4081;
+  background: linear-gradient(145deg, #e91e63, #c2185b);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #263238;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #37474f;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2196f3;
+}
