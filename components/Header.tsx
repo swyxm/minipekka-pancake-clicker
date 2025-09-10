@@ -11,12 +11,12 @@ export default function Header() {
     <header className="game-card p-6">
       <div className="flex items-center justify-between">
         <div className="text-center">
-          <h1 className="text-4xl md:text-6xl font-bold clash-font-bold text-pekka-blue mb-2 text-glow">
-            Mini Pekka Pancake Clicker
+          <h2 className="text-2xl md:text-4xl font-bold clash-font-bold text-pekka-blue mb-2 text-glow">
+            Mini Pekka's
+          </h2>
+          <h1 className="text-4xl md:text-6xl font-bold clash-font-bold pekka-text-secondary mb-2 text-glow">
+            Pancake Clicker
           </h1>
-          <p className="text-pekka-cyan text-lg clash-font">
-            🤖 Click to make pancakes! 🤖
-          </p>
         </div>
         
         <div className="flex items-center space-x-6">

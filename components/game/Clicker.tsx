@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import { useApiGameStore } from '@/store/apiGameStore'
 import Button from '@/components/ui/Button'
 import NumberDisplay from '@/components/ui/NumberDisplay'
@@ -87,48 +88,30 @@ export default function Clicker() {
         <source src="/pancakes.mp3" type="audio/mpeg" />
       </audio>
       <Card className="text-center" glow>
-        <h2 className="clash-font-bold text-3xl font-bold text-pekka-blue mb-6 text-glow">
-          Click Mini Pekka!
+        <h2 className="clash-font-bold text-3xl font-bold text-pekka-blue mb-8 text-glow">
+          Click the Pancakes!
         </h2>
       
-      <div className="relative inline-block mb-8">
+      <div className="relative inline-block">
         <PancakeEmitter onEmit={onEmit} className="relative inline-block">
         <motion.div
-          className={`relative p-8 rounded-full transition-all duration-150 cursor-pointer ${
-            isClicking 
-              ? 'scale-95 bg-pekka-navy/30 mechanical-click' 
-              : 'hover:scale-105 bg-pekka-navy/20 hover:bg-pekka-navy/30'
-          }`}
+          className="relative transition-all duration-150 cursor-pointer"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <div className="text-8xl mb-2 pancake-float">
-            🤖
+          <div className="absolute w-[230px] h-[230px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-400/30 animate-pulse-soft -z-10"></div>
+          <div className="relative w-52 h-52 mx-auto">
+            <Image
+              src="/pancakes.png"
+              alt="Pancakes"
+              width={256}
+              height={256}
+              className="w-full h-full object-contain"
+            />
           </div>
-          <div className="clash-font-bold text-2xl text-pekka-blue font-bold">
-            Mini Pekka
-          </div>
-          <div className="clash-font text-sm text-pekka-text-secondary mt-1">
-            +{clickPower.toLocaleString()} per click
-          </div>
-          
-          {/* Glow effect */}
-          <div className="absolute inset-0 rounded-full bg-pekka-blue/20 animate-pulse-soft"></div>
         </motion.div>
         </PancakeEmitter>
-        
-        {/* Pancake particles now handled by PancakeEmitter */}
       </div>
-      
-      <PancakeEmitter onEmit={onEmit} className="block mt-4">
-      <Button
-        onClick={() => { /* onEmit will be invoked by PancakeEmitter wrapper */ }}
-        size="lg"
-        className="w-full game-glow"
-      >
-        CLICK MINI PEKKA
-      </Button>
-      </PancakeEmitter>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
         <NumberDisplay
