@@ -1,4 +1,4 @@
-# 🥞 Click the Pancakes! 🥞
+# 🥞 Mini Pekka's Pancake Clicker! 🥞
 
 <div align="center">
 
@@ -21,9 +21,7 @@ An incredibly addictive idle clicker game featuring your favorite Clash Royale c
 
 <div align="center">
 
-![Game Preview](./public/pancakes.png)
-
-*Click the pancake to start your journey!*
+![Game Preview](./public/pekka.png)
 
 </div>
 
