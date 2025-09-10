@@ -157,3 +157,19 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #2196f3;
 }
+
+/* Subtle thin scrollbar utility for specific containers */
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(147, 197, 253, 0.35) transparent;
+}
+.thin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(147, 197, 253, 0.35);
+  border-radius: 9999px;
+}
