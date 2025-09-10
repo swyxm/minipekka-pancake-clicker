@@ -1,5 +1,8 @@
 import { create } from 'zustand'
 
+const PURCHASE_COOLDOWN_MS = 150
+let lastPurchaseAt = 0
+
 export interface Upgrade {
   id: string
   name: string
@@ -107,26 +110,81 @@ export const useApiGameStore = create<GameState>((set, get) => ({
   },
 
   buyUpgrade: async (upgradeId: string, quantity?: number | 'max') => {
-    // Sync latest state first to avoid stale "not enough" errors
-    await get().loadGameState({ silent: true })
     set({ error: null })
-    try {
-      let qty: number | 'max' = quantity ?? 1
-      const mode = get().quantityMode
-      if (quantity === undefined) {
-        qty = mode === 'x10' ? 10 : mode === 'x100' ? 100 : mode === 'max' ? 'max' : 1
-      }
 
+    const now = Date.now()
+    if (now - lastPurchaseAt < PURCHASE_COOLDOWN_MS) {
+      return false
+    }
+    lastPurchaseAt = now
+    // Determine intended quantity from mode if not passed
+    let requestedQty: number | 'max' = quantity ?? 1
+    const mode = get().quantityMode
+    if (quantity === undefined) {
+      requestedQty = mode === 'x10' ? 10 : mode === 'x100' ? 100 : mode === 'max' ? 'max' : 1
+    }
+
+    // Compute local affordable qty and totalCost using current store state for instant UI update
+    const state = get()
+    const upgradesCopy = state.upgrades.map(u => ({ ...u }))
+    const target = upgradesCopy.find(u => u.id === upgradeId)
+    if (!target) {
+      return false
+    }
+
+    // Derive qty if 'max' and cap by affordability
+    let nextCost = target.cost
+    let qtyNum = typeof requestedQty === 'number' ? requestedQty : Number.MAX_SAFE_INTEGER
+    let totalCost = 0
+    let affordableQty = 0
+    let tempPancakes = state.pancakes
+    for (let i = 0; i < qtyNum; i++) {
+      if (tempPancakes < nextCost) break
+      totalCost += nextCost
+      tempPancakes -= nextCost
+      affordableQty += 1
+      nextCost = Math.floor(nextCost * 1.15)
+    }
+
+    if (affordableQty === 0) {
+      return false
+    }
+
+    // Optimistic update: deduct pancakes, bump level and cost immediately
+    set((s) => {
+      const updatedUpgrades = s.upgrades.map(u => {
+        if (u.id !== upgradeId) return u
+        // compute next cost after affordableQty levels
+        let nc = u.cost
+        for (let i = 0; i < affordableQty; i++) {
+          nc = Math.floor(nc * 1.15)
+        }
+        return {
+          ...u,
+          level: u.level + affordableQty,
+          cost: nc,
+          unlocked: true,
+        }
+      })
+      // Recompute derived stats locally
+      const pancakesPerSecond = updatedUpgrades.reduce((sum, u) => sum + u.pancakesPerSecond * u.level, 0)
+      const clickPower = 1 + updatedUpgrades.reduce((sum, u) => sum + (u.clickPowerBonus || 0) * u.level, 0)
+      return {
+        pancakes: s.pancakes - totalCost,
+        upgrades: updatedUpgrades,
+        pancakesPerSecond,
+        clickPower,
+      }
+    })
+
+    // Send request to server and reconcile
+    try {
       const response = await fetch('/api/game/upgrade', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ upgradeId, quantity: qty }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ upgradeId, quantity: requestedQty }),
       })
-      
       const data = await response.json()
-      
       if (data.success) {
         set({
           pancakes: data.gameState.pancakes,
@@ -141,10 +199,15 @@ export const useApiGameStore = create<GameState>((set, get) => ({
         })
         return true
       } else {
-        set({ error: data.error })
+        // If server rejected, reload state to correct optimistic UI
+        await get().loadGameState({ silent: true })
+        if (data.error && !data.error.toLowerCase().includes('not enough')) {
+          set({ error: data.error })
+        }
         return false
       }
     } catch (error) {
+      await get().loadGameState({ silent: true })
       set({ error: 'Failed to purchase upgrade' })
       return false
     }
