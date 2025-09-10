@@ -13,7 +13,7 @@ export default function AchievementsPanel() {
   const totalCount = achievements.length
 
   return (
-    <Card className="h-full flex flex-col overflow-hidden">
+    <Card className="h-[60vh] flex flex-col overflow-hidden">
       <div className="flex-shrink-0">
         <h3 className="text-2xl font-bold clash-font-bold text-pekka-blue mb-4 flex items-center">
           <Trophy className="w-6 h-6 mr-2" />
