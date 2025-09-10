@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import NumberDisplay from '@/components/ui/NumberDisplay'
 import { Zap } from 'lucide-react'
+import Image from 'next/image'
 
 interface UpgradeCardProps {
   upgrade: Upgrade
@@ -65,7 +66,15 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
     }
   }
 
-  // No max level cap; omit percentage progress
+  const getImageSrc = () => {
+    if (upgrade.id === 'knight') return '/knight.png'
+    if (upgrade.id === 'prince') return '/prince.png'
+    if (upgrade.id === 'wizard') return '/wizard.png'
+    if (upgrade.id === 'dragon') return '/bbdragon.png'
+    return null
+  }
+
+  const imageSrc = getImageSrc()
 
   return (
     <motion.div
@@ -74,64 +83,73 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
       transition={{ duration: 0.3 }}
     >
       <Card
-        className={`p-4 transition-all duration-200 overflow-hidden ${
+        className={`p-2 transition-all duration-200 overflow-hidden ${
           getRarityColor(upgrade.rarity)
         } ${canAfford ? 'game-card-hover cursor-pointer game-glow' : 'opacity-50'}`}
         onClick={handleBuy}
         hover={canAfford}
       >
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center">
-            <span className="text-3xl mr-3">{upgrade.icon}</span>
-            <div>
-              <h4 className="clash-font-bold text-lg font-bold text-pekka-text">
-                {upgrade.name}
-              </h4>
-              <div className="flex items-center">
-                <span className="text-sm clash-font text-pekka-text-secondary">
-                  Owned {upgrade.level}
-                </span>
+        <div className="flex h-28">
+          <div className="flex-shrink-0 w-24 h-24 flex items-center justify-center">
+            {imageSrc ? (
+              <Image
+                src={imageSrc}
+                alt={upgrade.name}
+                width={96}
+                height={96}
+                className="object-contain w-full h-full"
+              />
+            ) : (
+              <span className="text-5xl">{upgrade.icon}</span>
+            )}
+          </div>
+          
+          <div className="flex-1 flex flex-col justify-between ml-3">
+            <div className="flex justify-between items-start">
+              <div>
+                <h4 className="clash-font-bold text-lg font-bold text-pekka-text">
+                  {upgrade.name}
+                </h4>
+                <div className="flex items-center">
+                  <span className="text-sm clash-font text-pekka-text-secondary">
+                    Owned {upgrade.level}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="text-right">
+                <div className="clash-font text-pekka-text-secondary text-xs">Price ({quantityMode.toUpperCase()}{quantityMode==='max'?'':''}{qty>0 && quantityMode!=='max'?`×${qty}`:''})</div>
+                <NumberDisplay
+                  value={totalCost}
+                  size="md"
+                  color={canAfford ? 'primary' : 'warning'}
+                />
               </div>
             </div>
-          </div>
-          
-          <div className="text-right">
-            <div className="clash-font text-pekka-text-secondary text-xs">Price ({quantityMode.toUpperCase()}{quantityMode==='max'?'':''}{qty>0 && quantityMode!=='max'?`×${qty}`:''})</div>
-            <NumberDisplay
-              value={totalCost}
-              size="md"
-              color={canAfford ? 'primary' : 'warning'}
-            />
-          </div>
-        </div>
-        
-        <p className="clash-font text-pekka-text-secondary text-sm mb-3">
-          {upgrade.description}
-        </p>
-        
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            {upgrade.pancakesPerSecond > 0 && (
-              <div className="flex items-center text-sm clash-font">
-                <Zap className="w-4 h-4 mr-1 text-pekka-success" />
-                <span className="text-pekka-success">
-                  +{upgrade.pancakesPerSecond.toLocaleString()}/sec
-                </span>
-              </div>
-            )}
-            {upgrade.clickPowerBonus && upgrade.clickPowerBonus > 0 && (
-              <div className="flex items-center text-sm clash-font">
-                <Zap className="w-4 h-4 mr-1 text-pekka-accent" />
-                <span className="text-pekka-accent">
-                  +{upgrade.clickPowerBonus.toLocaleString()}/click
-                </span>
-              </div>
-            )}
             
-            {/* No lock/max-level labels; purchasable based on affordability only */}
+            <p className="clash-font text-pekka-text-secondary text-sm">
+              {upgrade.description}
+            </p>
+            
+            <div className="flex items-center justify-between">
+              {upgrade.pancakesPerSecond > 0 && (
+                <div className="flex items-center text-sm clash-font">
+                  <Zap className="w-4 h-4 mr-1 text-pekka-success" />
+                  <span className="text-pekka-success">
+                    +{upgrade.pancakesPerSecond.toLocaleString()}/sec
+                  </span>
+                </div>
+              )}
+              {upgrade.clickPowerBonus && upgrade.clickPowerBonus > 0 && (
+                <div className="flex items-center text-sm clash-font">
+                  <Zap className="w-4 h-4 mr-1 text-pekka-accent" />
+                  <span className="text-pekka-accent">
+                    +{upgrade.clickPowerBonus.toLocaleString()}/click
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
-          
-          {/* Progress bar removed due to unlimited levels */}
         </div>
       </Card>
     </motion.div>
