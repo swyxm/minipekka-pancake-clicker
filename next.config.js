@@ -8,7 +8,7 @@ const nextConfig = {
       },
     ],
   },
-  outputFileTracingRoot: '/Users/swayam/CodingProjects/minipekka-pancake-clicker',
+  serverExternalPackages: ['source-map'],
 }
 
 module.exports = nextConfig
