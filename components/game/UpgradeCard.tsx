@@ -68,12 +68,21 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
   }
 
   const getImageSrc = () => {
+    // char
     if (upgrade.id === 'mini-pekka') return '/minipekka.png'
     if (upgrade.id === 'knight') return '/knight.png'
     if (upgrade.id === 'prince') return '/prince.png'
     if (upgrade.id === 'wizard') return '/wizard.png'
     if (upgrade.id === 'dragon') return '/bbdragon.png'
     if (upgrade.id === 'pekka') return '/pekka.png'
+    
+    // cp
+    if (upgrade.id === 'mini-pekka-sharp-blade') return '/minisword.png'
+    if (upgrade.id === 'royal-reinforcement') return '/royalreinforcement.png'
+    if (upgrade.id === 'elixir-overclock') return '/elixir.png'
+    if (upgrade.id === 'rage-spell') return '/rage.png'
+    if (upgrade.id === 'pekka-core-upgrade') return '/pekkacore.png'
+    
     return null
   }
 
@@ -93,19 +102,24 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
         hover={canAfford}
       >
         <div className="flex h-28">
-          <div className="flex-shrink-0 w-24 h-24 flex items-center justify-center">
+          <div className={`flex-shrink-0 flex items-center justify-center h-full ${
+            upgrade.clickPowerBonus && upgrade.clickPowerBonus > 0 
+              ? 'w-16' 
+              : 'w-24'
+          }`}>
             {imageSrc ? (
               <Image
                 src={imageSrc}
                 alt={upgrade.name}
-                width={upgrade.id === 'pekka' ? 120 : 96}
-                height={upgrade.id === 'pekka' ? 120 : 96}
+                width={upgrade.id === 'pekka' ? 120 : upgrade.id === 'pekka-core-upgrade' ? 120 : upgrade.clickPowerBonus && upgrade.clickPowerBonus > 0 ? 64 : 96}
+                height={upgrade.id === 'pekka' ? 120 : upgrade.id === 'pekka-core-upgrade' ? 120 : upgrade.clickPowerBonus && upgrade.clickPowerBonus > 0 ? 64 : 96}
                 className={`object-contain w-full h-full ${
-                  upgrade.id === 'pekka' ? '-ml-4 scale-150' : ''
+                  upgrade.id === 'pekka' ? '-ml-4 scale-150' : 
+                  upgrade.id === 'pekka-core-upgrade' ? '-ml-4 scale-150' : ''
                 }`}
               />
             ) : (
-              <span className="text-5xl">{upgrade.icon}</span>
+              <span className={`${upgrade.clickPowerBonus && upgrade.clickPowerBonus > 0 ? 'text-3xl' : 'text-5xl'}`}>{upgrade.icon}</span>
             )}
           </div>
           
@@ -116,7 +130,7 @@ export default function UpgradeCard({ upgrade }: UpgradeCardProps) {
                   {upgrade.name}
                 </h4>
                 <div className="flex items-center">
-                  <span className="text-sm clash-font text-pekka-text-secondary">
+                  <span className="text-xs clash-font text-pekka-text-secondary">
                     Owned {upgrade.level}
                   </span>
                 </div>

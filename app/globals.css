@@ -19,8 +19,12 @@ body {
 }
 
 body {
-  color: #e3f2fd;
+  color: theme('colors.pekka-text');
   background-attachment: fixed;
+  background: radial-gradient(60% 60% at 50% 0%, rgba(73, 115, 255, 0.15) 0%, rgba(0,0,0,0) 60%),
+              radial-gradient(40% 40% at 90% 20%, rgba(255, 79, 125, 0.12) 0%, rgba(0,0,0,0) 60%),
+              radial-gradient(30% 30% at 10% 30%, rgba(120, 194, 230, 0.12) 0%, rgba(0,0,0,0) 60%),
+              linear-gradient(135deg, theme('colors.pekka-navy-dark') 0%, theme('colors.pekka-dark') 60%, theme('colors.pekka-darker') 100%);
 }
 
 .clash-font {
@@ -46,6 +50,7 @@ body {
   background: linear-gradient(145deg, theme('colors.pekka-navy'), theme('colors.pekka-dark'));
   border: 1px solid theme('colors.pekka-border');
   box-shadow: theme('boxShadow.pekka');
+  overflow: visible; /* ensure inner glows are not clipped by rounding */
 }
 
 .game-card-hover {

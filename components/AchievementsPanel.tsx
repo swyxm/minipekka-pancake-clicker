@@ -24,7 +24,7 @@ export default function AchievementsPanel() {
         </h3>
       </div>
       
-      <div className="flex-1 overflow-y-auto space-y-3 pr-2">
+      <div className="flex-1 overflow-y-auto space-y-3 pr-2 thin-scrollbar">
         {achievements.map((achievement) => (
           <AchievementCard
             key={achievement.id}

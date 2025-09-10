@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { click, getOrCreateSessionId, getState, serializeState } from '@/lib/game'
+import { cookies } from 'next/headers'
+import { click, getOrCreateSessionId, getState, serializeState, SESSION_COOKIE } from '@/lib/game'
 
 export async function POST(request: NextRequest) {
   try {
     const _ = await request.json().catch(() => ({}))
-    const sessionId = getOrCreateSessionId()
-    const state = getState(sessionId)
+    const { id, isNew } = await getOrCreateSessionId()
+    const state = getState(id)
+    if (isNew) {
+      const jar = await cookies()
+      jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
+    }
     click(state)
     return NextResponse.json({ success: true, gameState: serializeState(state) })
   } catch (error) {
@@ -16,7 +21,11 @@ export async function POST(request: NextRequest) {
   }
 }
 export async function GET() {
-  const sessionId = getOrCreateSessionId()
-  const state = getState(sessionId)
+  const { id, isNew } = await getOrCreateSessionId()
+  const state = getState(id)
+  if (isNew) {
+    const jar = await cookies()
+    jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
+  }
   return NextResponse.json({ success: true, gameState: serializeState(state) })
 }

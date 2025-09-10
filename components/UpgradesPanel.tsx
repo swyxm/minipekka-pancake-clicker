@@ -18,7 +18,7 @@ export default function UpgradesPanel() {
   }, [upgrades, tab])
 
   return (
-    <Card className="h-[60vh] flex flex-col overflow-hidden">
+    <Card className="h-[60vh] flex flex-col overflow-hidden mt-4 p-4">
       <div className="flex-shrink-0">
         <h3 className="text-2xl font-bold clash-font-bold text-pekka-blue mb-4 flex items-center">
           <ShoppingCart className="w-6 h-6 mr-2" />
@@ -55,7 +55,7 @@ export default function UpgradesPanel() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto space-y-3 pr-2 thin-scrollbar">
+      <div className="flex-1 overflow-y-auto space-y-3 pr-2 pl-2 pt-2 pb-2 thin-scrollbar">
         {filtered.map((upgrade) => (
           <UpgradeCard key={upgrade.id} upgrade={upgrade} />
         ))}

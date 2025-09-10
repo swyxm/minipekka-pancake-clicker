@@ -23,24 +23,24 @@ export default function AchievementCard({ achievement, totalPancakes }: Achievem
       transition={{ duration: 0.3 }}
     >
       <Card
-        className={`p-4 transition-all duration-200 ${
+        className={`p-4 transition-all duration-200 overflow-hidden ${
           isUnlocked
             ? 'pekka-glow border-pekka-warning'
             : 'border-pekka-border'
         }`}
       >
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center">
-            <span className="text-3xl mr-3">
+          <div className="flex items-center min-w-0">
+            <span className="text-3xl mr-3 flex-shrink-0">
               {isUnlocked ? '🏆' : achievement.icon}
             </span>
-            <div>
-              <h4 className={`clash-font-bold text-lg font-bold ${
+            <div className="min-w-0">
+              <h4 className={`clash-font-bold text-lg font-bold truncate ${
                 isUnlocked ? 'text-pekka-warning' : 'text-pekka-text'
               }`}>
                 {achievement.name}
               </h4>
-              <p className="clash-font text-sm text-pekka-text-secondary">
+              <p className="clash-font text-sm text-pekka-text-secondary line-clamp-2 break-words">
                 {achievement.description}
               </p>
             </div>

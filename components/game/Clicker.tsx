@@ -46,20 +46,15 @@ export default function Clicker() {
     }
   }
 
-  // Handle clicking session timing
   useEffect(() => {
     if (isClickingSession && sessionStartTime) {
-      // Clear any existing interval
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
       }
 
-      // Set up interval to play sound every 4 seconds
       intervalRef.current = setInterval(() => {
         playSound()
       }, 3000)
-
-      // Cleanup interval when component unmounts or session ends
       return () => {
         if (intervalRef.current) {
           clearInterval(intervalRef.current)
@@ -87,8 +82,9 @@ export default function Clicker() {
       <audio ref={audioRef} preload="auto">
         <source src="/pancakes.mp3" type="audio/mpeg" />
       </audio>
-      <Card className="text-center" glow>
-        <h2 className="clash-font-bold text-3xl font-bold text-pekka-blue mb-8 text-glow">
+      <div style={{ height: '514px' }}>
+        <Card className="text-center overflow-visible h-full" glow>
+        <h2 className="clash-font-bold text-3xl font-bold text-pekka-blue mb-6 text-glow">
           Click the Pancakes!
         </h2>
       
@@ -99,8 +95,8 @@ export default function Clicker() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <div className="absolute w-[230px] h-[230px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-400/30 animate-pulse-soft -z-10"></div>
-          <div className="relative w-52 h-52 mx-auto">
+          <div className="absolute w-[270px] h-[270px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-yellow-400/30 animate-pulse-soft -z-10"></div>
+          <div className="relative w-[256px] h-[256px] mx-auto">
             <Image
               src="/pancakes.png"
               alt="Pancakes"
@@ -113,7 +109,7 @@ export default function Clicker() {
         </PancakeEmitter>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 mb-8">
         <NumberDisplay
           value={pancakes}
           label="Current Pancakes"
@@ -136,6 +132,7 @@ export default function Clicker() {
         />
       </div>
       </Card>
+      </div>
     </>
   )
 }

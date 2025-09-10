@@ -40,7 +40,7 @@ export interface GameState {
   unlockedAchievements: string[]
 }
 
-const SESSION_COOKIE = 'mp_session'
+export const SESSION_COOKIE = 'mp_session'
 
 // In-memory session store (replace with DB for persistence)
 const sessionIdToState = new Map<string, GameState>()
@@ -48,7 +48,7 @@ const sessionIdToState = new Map<string, GameState>()
 const initialUpgrades: Upgrade[] = [
   {
     id: 'mini-pekka-sharp-blade',
-    name: 'Mini Pekka: Sharpened Blade',
+    name: 'Sharpened Blade',
     description: 'Sharper sword, harder hits. Clicks slice for more!',
     cost: 15,
     level: 0,
@@ -100,7 +100,7 @@ const initialUpgrades: Upgrade[] = [
   },
   {
     id: 'pekka-core-upgrade',
-    name: 'P.E.K.K.A Core Upgrade',
+    name: 'P.E.K.K.A Core',
     description: 'Upgrade the P.E.K.K.A core for monstrous clicks.',
     cost: 15000,
     level: 0,
@@ -212,14 +212,15 @@ function createInitialState(): GameState {
   }
 }
 
-export function getOrCreateSessionId(): string {
-  const jar = cookies()
+export async function getOrCreateSessionId(): Promise<{ id: string, isNew: boolean }> {
+  const jar = await cookies()
   let id = jar.get(SESSION_COOKIE)?.value
+  let isNew = false
   if (!id) {
     id = crypto.randomUUID()
-    jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
+    isNew = true
   }
-  return id
+  return { id, isNew }
 }
 
 export function getState(sessionId: string): GameState {

@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { buyUpgrade, getOrCreateSessionId, getState } from '@/lib/game'
+import { cookies } from 'next/headers'
+import { buyUpgrade, getOrCreateSessionId, getState, SESSION_COOKIE } from '@/lib/game'
 
 export async function POST(request: NextRequest) {
   try {
     const { upgradeId, quantity = 1 } = await request.json()
-    const sessionId = getOrCreateSessionId()
-    const state = getState(sessionId)
+    const { id, isNew } = await getOrCreateSessionId()
+    const state = getState(id)
+    if (isNew) {
+      const jar = await cookies()
+      jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
+    }
     const result = buyUpgrade(state, upgradeId, quantity)
     if (!result.success) {
       return NextResponse.json({ success: false, error: result.error }, { status: 400 })
@@ -20,7 +25,11 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
-  const sessionId = getOrCreateSessionId()
-  const state = getState(sessionId)
+  const { id, isNew } = await getOrCreateSessionId()
+  const state = getState(id)
+  if (isNew) {
+    const jar = await cookies()
+    jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
+  }
   return NextResponse.json({ success: true, upgrades: state.upgrades })
 }
