@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 
 interface ProgressBarProps {
-  progress: number // 0-100
+  progress: number
   height?: 'sm' | 'md' | 'lg'
   color?: 'primary' | 'success' | 'warning' | 'accent'
   showPercentage?: boolean

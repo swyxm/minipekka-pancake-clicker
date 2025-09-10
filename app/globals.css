@@ -172,7 +172,6 @@ body {
   background: theme('colors.pekka-blue');
 }
 
-/* Subtle thin scrollbar utility for specific containers */
 .thin-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: theme('colors.pekka-blue/35') transparent;

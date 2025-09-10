@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion'
 import { useApiGameStore } from '@/store/apiGameStore'
 import { Upgrade } from '@/store/apiGameStore'
-import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import NumberDisplay from '@/components/ui/NumberDisplay'
 import { Zap } from 'lucide-react'

@@ -4,7 +4,6 @@ export const dynamic = 'force-dynamic'
 import { cookies } from 'next/headers'
 import { getOrCreateSessionId, getState, resetState, serializeState, SESSION_COOKIE } from '@/lib/game'
 
-// In-memory storage for demo purposes
 let gameState: any = {
   pancakes: 0,
   totalPancakes: 0,

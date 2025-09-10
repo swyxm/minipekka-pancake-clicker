@@ -11,7 +11,6 @@ export default function Header() {
   return (
     <header className="game-card p-6">
       <div className="flex flex-col items-center">
-        {/* Title row with flanking pancakes */}
         <div className="flex items-center justify-center gap-4">
           <Image src="/pancakes.png" alt="Pancakes" width={100} height={100} className="object-contain" />
           <div className="text-center">
@@ -25,7 +24,6 @@ export default function Header() {
           <Image src="/pancakes.png" alt="Pancakes" width={100} height={100} className="object-contain" />
         </div>
 
-        {/* Counters below title on the same line */}
         <div className="mt-3 flex items-center justify-center gap-8">
           <div className="flex items-center gap-2">
             <NumberDisplay value={pancakes} size="md" color="primary" />

@@ -42,7 +42,6 @@ export interface GameState {
 
 export const SESSION_COOKIE = 'mp_session'
 
-// In-memory session store (replace with DB for persistence)
 const sessionIdToState = new Map<string, GameState>()
 
 const initialUpgrades: Upgrade[] = [
@@ -284,10 +283,8 @@ export function buyUpgrade(state: GameState, upgradeId: string, quantity: number
     return { success: false, error: 'Upgrade is at max level' }
   }
 
-  // Determine quantity
   let qty = typeof quantity === 'number' ? quantity : 0
   if (quantity === 'max') {
-    // compute the maximum affordable considering rounding
     let tempCost = upgrade.cost
     let tempLevel = upgrade.level
     let tempPancakes = state.pancakes
@@ -303,7 +300,6 @@ export function buyUpgrade(state: GameState, upgradeId: string, quantity: number
 
   qty = Math.max(1, Math.min(qty, upgrade.maxLevel - upgrade.level))
 
-  // Calculate total cost iteratively to respect rounding
   let totalCost = 0
   let nextCost = upgrade.cost
   let levelsToBuy = qty
@@ -317,11 +313,10 @@ export function buyUpgrade(state: GameState, upgradeId: string, quantity: number
     return { success: false, error: 'Not enough pancakes' }
   }
 
-  // Apply purchase
   state.pancakes -= totalCost
   upgrade.level += qty
   upgrade.unlocked = true
-  upgrade.cost = nextCost // next cost after qty increments
+  upgrade.cost = nextCost
 
   updatePancakesPerSecond(state)
   updateClickPower(state)
