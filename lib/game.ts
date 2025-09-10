@@ -111,7 +111,8 @@ const initialUpgrades: Upgrade[] = [
     icon: '🤖',
     unlocked: false,
   },
-  // Passive Generation Upgrades
+
+
   {
     id: 'mini-pekka',
     name: 'Mini Pekka',

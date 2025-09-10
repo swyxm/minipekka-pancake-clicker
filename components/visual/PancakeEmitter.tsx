@@ -52,7 +52,6 @@ export default function PancakeEmitter({
     <div
       className={`relative ${className}`}
       onPointerDown={(e) => emitAt({ clientX: e.clientX, clientY: e.clientY, currentTarget: e.currentTarget as HTMLDivElement })}
-      onClick={(e) => emitAt({ clientX: e.clientX, clientY: e.clientY, currentTarget: e.currentTarget as HTMLDivElement })}
     >
       {children}
       {particles.map((p) => (
