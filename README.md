@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/pekkalogo.png" alt="Pancake Clicker Banner" />
+  <img src="public/pekkalogo.png" alt="Pancake Clicker Banner" />
 </p>
 
 <p align="center">
