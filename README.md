@@ -1,15 +1,17 @@
-# 🥞 Mini Pekka's Pancake Clicker! 🥞
+<p align="center">
+  <img src="public/pekkalogo.png" alt="Pancake Clicker Banner" />
+</p>
 
-<div align="center">
-![Pancake Clicker Banner](./public/pekkalogo.png)
-**A Clash Royale themed idle clicker game that's absolutely addictive!**
+<p align="center">
+  <b>A Clash Royale themed idle clicker game that's absolutely addictive!</b>
+</p>
 
-[![Next.js](https://img.shields.io/badge/Next.js-15.5.2-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.3.6-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
-[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
-
-</div>
+<p align="center">
+  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-15.5.2-black?style=for-the-badge&logo=next.js"></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-5.9.2-blue?style=for-the-badge&logo=typescript"></a>
+  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-3.3.6-38B2AC?style=for-the-badge&logo=tailwind-css"></a>
+  <a href="https://vercel.com/"><img src="https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel"></a>
+</p>
 
 ---
 
