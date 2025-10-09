@@ -152,9 +152,9 @@ export async function GET() {
   const encoded = jar.get(STATE_COOKIE)?.value || null
   hydrateStateFromCookie(state, encoded)
   if (isNew) {
-    jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
+    jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'none', secure: true, path: '/', maxAge: 60 * 60 * 24 * 365 })
   }
-  jar.set(STATE_COOKIE, encodeStateToCookie(state), { httpOnly: false, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
+  jar.set(STATE_COOKIE, encodeStateToCookie(state), { httpOnly: false, sameSite: 'none', secure: true, path: '/', maxAge: 60 * 60 * 24 * 365 })
   return NextResponse.json(
     { success: true, gameState: serializeState(state) },
     { headers: { 'Cache-Control': 'no-store' } }
@@ -170,9 +170,9 @@ export async function POST(request: NextRequest) {
     const encoded = jar.get(STATE_COOKIE)?.value || null
     hydrateStateFromCookie(state, encoded)
     if (isNew) {
-      jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
+      jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'none', secure: true, path: '/', maxAge: 60 * 60 * 24 * 365 })
     }
-    jar.set(STATE_COOKIE, encodeStateToCookie(state), { httpOnly: false, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
+    jar.set(STATE_COOKIE, encodeStateToCookie(state), { httpOnly: false, sameSite: 'none', secure: true, path: '/', maxAge: 60 * 60 * 24 * 365 })
     return NextResponse.json(
       { success: true, gameState: serializeState(state) },
       { headers: { 'Cache-Control': 'no-store' } }
@@ -190,7 +190,7 @@ export async function DELETE() {
   const state = resetState(id)
   if (isNew) {
     const jar = await cookies()
-    jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 })
+    jar.set(SESSION_COOKIE, id, { httpOnly: true, sameSite: 'none', secure: true, path: '/', maxAge: 60 * 60 * 24 * 365 })
   }
   return NextResponse.json(
     { success: true, gameState: serializeState(state) },
